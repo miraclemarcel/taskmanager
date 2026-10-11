@@ -1,29 +1,34 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Mulish } from "next/font/google";
 import "./globals.css";
+import { AppShell } from "@/components/app-shell";
+import { TasksProvider } from "@/lib/tasks-store";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const mulish = Mulish({
+  variable: "--font-mulish",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Task Manager",
-  description: "Fullstack task manager",
+  title: "QuickTask",
+  description: "A personal workspace for keeping track of what needs doing.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${mulish.variable} h-full antialiased`}>
+      <body className="min-h-full">
+        {/* The mock data dates itself against the current day, which Cache
+            Components treats as a runtime value — this boundary keeps that read
+            out of the prerender instead of freezing "today" at build time. */}
+        <Suspense fallback={<div className="min-h-dvh bg-canvas" />}>
+          <TasksProvider>
+            <AppShell>{children}</AppShell>
+          </TasksProvider>
+        </Suspense>
+      </body>
     </html>
   );
 }

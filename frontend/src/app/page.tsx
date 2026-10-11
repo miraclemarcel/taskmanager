@@ -1,7 +1,18 @@
-export default function Home() {
+import { TaskView } from "@/components/task-view";
+
+export default function AllTasksPage() {
   return (
-    <main className="flex flex-1 items-center justify-center">
-      <p className="text-sm text-zinc-500">Task Manager</p>
-    </main>
+    <TaskView
+      view="all"
+      title="My Tasks"
+      description="Welcome back. Let’s make meaningful progress today."
+      heading="All Tasks"
+      empty={{
+        variant: "tasks",
+        title: "Your task list is ready",
+        description: "Create your first task and start making progress today.",
+        action: "Add your first task",
+      }}
+    />
   );
 }

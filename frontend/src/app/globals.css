@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Design tokens lifted from the QuickTask Figma file. */
+@theme {
+  --font-sans: var(--font-mulish), ui-sans-serif, system-ui, sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* surfaces */
+  --color-canvas: #f7f8fb;
+  --color-surface: #ffffff;
+  --color-subtle: #f8f9fc;
+  --color-rowdone: #fbfcfd;
+  --color-line: #e7e9f0;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* text */
+  --color-ink: #161b32;
+  --color-navy: #16204a;
+  --color-muted: #667085;
+  --color-faint: #98a2b3;
+
+  /* accents */
+  --color-tint-blue: #eef0f8;
+  --color-tint-amber: #fff4e7;
+  --color-tint-green: #e8f7f0;
+  --color-avatar: #dce3ff;
+  --color-success: #16845b;
+  --color-danger: #c83c4a;
+  --color-checkline: #c9cdda;
+
+  /* radii */
+  --radius-check: 8px;
+  --radius-field: 12px;
+  --radius-card: 16px;
+  --radius-sheet: 24px;
+
+  /* elevation */
+  --shadow-raise: 0 2px 2.5px rgba(22, 32, 74, 0.18);
+  --shadow-stat: 0 1px 1px rgba(16, 24, 40, 0.03), 0 4px 8px rgba(16, 24, 40, 0.04);
+  --shadow-panel: 0 1px 2px rgba(16, 24, 40, 0.03), 0 4px 16px rgba(16, 24, 40, 0.04);
+  --shadow-sheet: 0 24px 30px rgba(22, 32, 74, 0.2);
+
+  /* the design's own content cap */
+  --container-shell: 1152px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-canvas);
+  color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* The nav/affordance SVGs ship with their stroke colour baked in. The design
+   only provides the grey version, so the selected row recolours it to white
+   rather than substituting a different asset. */
+.icon-on-dark {
+  filter: brightness(0) invert(1);
+}
+
+/* The summary strip overflows the phone frame by design; it stays swipeable
+   without a scrollbar cutting across the cards. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
