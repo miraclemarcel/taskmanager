@@ -1,0 +1,25 @@
+// QuickTask data model. Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(200)
+  /// Calendar day as "YYYY-MM-DD" (no time zone), or null when unset.
+  dueDate   String?  @map("due_date") @db.VarChar(10)
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([dueDate])
+  @@index([completed])
+  @@map("tasks")
+}
