@@ -4,6 +4,9 @@ export type Task = {
   /** ISO calendar day (yyyy-mm-dd), or null when no due date was set. */
   dueDate: string | null;
   completed: boolean;
+  /** ISO timestamps set by the API. */
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type TaskDraft = {

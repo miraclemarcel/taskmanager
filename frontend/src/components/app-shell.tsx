@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { useTasksStore } from "@/store";
 import { DialogHost } from "./dialog-host";
 import { Sidebar } from "./sidebar";
 import { TopBar } from "./top-bar";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const fetchTasks = useTasksStore((state) => state.fetchTasks);
+
+  // The shell persists across route changes, so tasks load once per visit.
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
 
   // Navigating closes the drawer via each link's own onClose, so no effect
   // needs to mirror the pathname back into state.

@@ -1,12 +1,14 @@
 "use client";
 
 import { formatDueDate } from "@/lib/dates";
-import { useTasks } from "@/lib/tasks-store";
+import { useTasksStore, useUiStore } from "@/store";
 import type { Task } from "@/lib/types";
 import { Icon } from "./icon";
 
 export function TaskRow({ task }: { task: Task }) {
-  const { toggleTask, openEdit, openDelete } = useTasks();
+  const toggleTask = useTasksStore((state) => state.toggleTask);
+  const openEdit = useUiStore((state) => state.openEdit);
+  const openDelete = useUiStore((state) => state.openDelete);
   const due = formatDueDate(task.dueDate);
 
   return (

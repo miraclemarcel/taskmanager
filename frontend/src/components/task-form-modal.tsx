@@ -1,24 +1,36 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useTasks } from "@/lib/tasks-store";
 import type { Task } from "@/lib/types";
+import { errorMessage, useTasksStore, useUiStore } from "@/store";
 import { Modal } from "./modal";
 
 export function TaskFormModal({ task }: { task?: Task }) {
-  const { addTask, updateTask, closeDialog } = useTasks();
+  const addTask = useTasksStore((state) => state.addTask);
+  const updateTask = useTasksStore((state) => state.updateTask);
+  const closeDialog = useUiStore((state) => state.closeDialog);
   const [title, setTitle] = useState(task?.title ?? "");
   const [dueDate, setDueDate] = useState(task?.dueDate ?? "");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const editing = Boolean(task);
-  const canSave = title.trim().length > 0;
+  const canSave = title.trim().length > 0 && !pending;
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (!canSave) return;
     const draft = { title: title.trim(), dueDate: dueDate || null };
-    if (task) updateTask(task.id, draft);
-    else addTask(draft);
+    setPending(true);
+    setError(null);
+    try {
+      if (task) await updateTask(task.id, draft);
+      else await addTask(draft);
+      closeDialog();
+    } catch (err) {
+      setError(errorMessage(err));
+      setPending(false);
+    }
   }
 
   return (
@@ -34,6 +46,7 @@ export function TaskFormModal({ task }: { task?: Task }) {
             onChange={(event) => setTitle(event.target.value)}
             placeholder="What needs to be done?"
             required
+            maxLength={200}
             className="h-12 rounded-field border border-line bg-surface px-4 text-[15px] font-medium text-ink outline-none transition-colors placeholder:text-faint focus:border-navy"
           />
         </div>
@@ -51,13 +64,19 @@ export function TaskFormModal({ task }: { task?: Task }) {
           />
         </div>
 
+        {error ? (
+          <p role="alert" className="text-sm font-semibold text-danger">
+            {error}
+          </p>
+        ) : null}
+
         <div className="flex flex-col gap-3 pt-2">
           <button
             type="submit"
             disabled={!canSave}
             className="flex min-h-11 items-center justify-center rounded-field bg-navy px-4 text-sm font-bold text-white shadow-raise transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-50"
           >
-            {editing ? "Save changes" : "Save Task"}
+            {pending ? "Saving…" : editing ? "Save changes" : "Save Task"}
           </button>
           <button
             type="button"

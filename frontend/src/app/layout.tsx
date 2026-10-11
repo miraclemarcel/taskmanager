@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "@/components/app-shell";
-import { TasksProvider } from "@/lib/tasks-store";
 
 const mulish = Mulish({
   variable: "--font-mulish",
@@ -20,13 +19,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${mulish.variable} h-full antialiased`}>
       <body className="min-h-full">
-        {/* The mock data dates itself against the current day, which Cache
+        {/* The Today view and counts compare against the current day, which Cache
             Components treats as a runtime value — this boundary keeps that read
             out of the prerender instead of freezing "today" at build time. */}
         <Suspense fallback={<div className="min-h-dvh bg-canvas" />}>
-          <TasksProvider>
-            <AppShell>{children}</AppShell>
-          </TasksProvider>
+          <AppShell>{children}</AppShell>
         </Suspense>
       </body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTasks } from "@/lib/tasks-store";
+import { useUiStore } from "@/store";
 import { Icon } from "./icon";
 import { Avatar } from "./top-bar";
 
@@ -10,7 +10,7 @@ type PageIntroProps = {
 };
 
 export function PageIntro({ title, description }: PageIntroProps) {
-  const { openAdd } = useTasks();
+  const openAdd = useUiStore((state) => state.openAdd);
 
   return (
     <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">

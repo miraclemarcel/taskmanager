@@ -1,7 +1,7 @@
 "use client";
 
-import { useTasks } from "@/lib/tasks-store";
 import type { ViewId } from "@/lib/types";
+import { useTasksForView } from "@/store";
 import { PageIntro } from "./page-intro";
 import { SummaryCards } from "./summary-cards";
 import { TaskPanel } from "./task-panel";
@@ -15,13 +15,13 @@ type TaskViewProps = {
 };
 
 export function TaskView({ view, title, description, heading, empty }: TaskViewProps) {
-  const { tasksForView } = useTasks();
+  const tasks = useTasksForView(view);
 
   return (
     <>
       <PageIntro title={title} description={description} />
       <SummaryCards />
-      <TaskPanel heading={heading} tasks={tasksForView(view)} empty={empty} />
+      <TaskPanel heading={heading} tasks={tasks} empty={empty} />
     </>
   );
 }

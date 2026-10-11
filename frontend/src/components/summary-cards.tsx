@@ -1,6 +1,6 @@
 "use client";
 
-import { useTasks } from "@/lib/tasks-store";
+import { useTaskCounts } from "@/store";
 import { Icon } from "./icon";
 
 const CARDS = [
@@ -10,7 +10,7 @@ const CARDS = [
 ] as const;
 
 export function SummaryCards() {
-  const { counts } = useTasks();
+  const counts = useTaskCounts();
   const values = {
     total: counts.all,
     pending: counts.pending,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTasks } from "@/lib/tasks-store";
+import { useUiStore } from "@/store";
 import { Icon } from "./icon";
 
 type EmptyStateProps = {
@@ -12,7 +12,7 @@ type EmptyStateProps = {
 };
 
 export function EmptyState({ variant, title, description, action }: EmptyStateProps) {
-  const { openAdd } = useTasks();
+  const openAdd = useUiStore((state) => state.openAdd);
   const glyph = variant === "completed" ? "empty-check-circle" : "empty-clipboard";
   const badge = variant === "completed" ? "empty-check-badge" : "empty-plus-badge";
 

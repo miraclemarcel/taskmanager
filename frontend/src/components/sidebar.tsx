@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTasks } from "@/lib/tasks-store";
+import { useTaskCounts } from "@/store";
 import type { ViewId } from "@/lib/types";
 import { Icon } from "./icon";
 
@@ -14,7 +14,7 @@ const NAV: { id: ViewId; href: string; label: string; icon: string }[] = [
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
-  const { counts } = useTasks();
+  const counts = useTaskCounts();
 
   return (
     <div className="flex h-full flex-col border-r border-line bg-surface px-4 py-5">
